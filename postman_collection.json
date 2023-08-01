@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "6afc6278-fff8-4afa-a53f-adbefe1e0830",
+		"name": "EnverX Backend Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10598822"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@abc.com\",\n    \"password\": \"password\",\n    \"username\": \"john.doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@abc.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Get all posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts?page=1&category=Technology",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "For pagination"
+								},
+								{
+									"key": "category",
+									"value": "Technology",
+									"description": "Technology and Food posts are present in the database\nOther Categories - Travel, Health, Personal Development, Fashion, Parenting, Home & Decor, Finance, Books & Literature, Entertainment, Lifestyle, Photography, Education, Environment, Art"
+								},
+								{
+									"key": "author",
+									"value": "64c8b89e37d9b94d4d57e154",
+									"description": "user id from database",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Lorem Ipsum\",\n    \"content\": \"Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, ratione quae. Molestias aperiam autem porro doloribus reprehenderit accusantium ipsum suscipit! Quod blanditiis sed sapiente in doloribus? Amet animi quos perspiciatis delectus provident, debitis, id earum voluptas corporis deserunt, nostrum blanditiis? Quod molestias odit error illum quidem sequi reprehenderit architecto, eaque, qui obcaecati possimus! Eveniet aliquid aspernatur fugiat harum temporibus animi omnis cupiditate quis deserunt deleniti nihil natus sapiente laudantium asperiores, facere iure. Accusantium dicta minus aliquam perspiciatis magnam porro et, sint animi consequatur deserunt minima id, error ipsum eaque ex dolorum repellendus molestiae sapiente quisquam, vel blanditiis veritatis. Dicta, culpa!\",\n    \"category\": \"Technology\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/64c8fc11b4a1c2558c018c46",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"posts",
+								"64c8fc11b4a1c2558c018c46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"test 15\",\n    \"content\": \"Updated description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/posts/64c8e5ea0c9563139c74dda6",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"posts",
+								"64c8e5ea0c9563139c74dda6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/posts/64c8e5ea0c9563139c74dda6",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"posts",
+								"64c8e5ea0c9563139c74dda6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
