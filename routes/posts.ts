@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 import {
   addNewPost,
   deletePostById,
@@ -8,7 +8,6 @@ import {
   updatePost,
 } from "../controllers/posts";
 import { BlogCategory } from "../models/post";
-import { isValidObjectId } from "mongoose";
 
 const router = Router();
 router.get(
@@ -16,6 +15,7 @@ router.get(
   query("page").isInt({ min: 1 }),
   query("date").optional().isIn(["asc", "desc"]),
   query("title").optional().isIn(["asc", "desc"]),
+  query("author").optional().isMongoId(),
   query("category")
     .optional()
     .isIn(Object.values(BlogCategory))
@@ -43,13 +43,13 @@ router.post(
 
 router.get(
   "/:id",
-  query("id").custom((val) => !isValidObjectId(val)),
+  param("id").isMongoId().withMessage("Invalid post id"),
   getPostById
 );
 
 router.put(
   "/:id",
-  query("id").custom((val) => !isValidObjectId(val)),
+  param("id").isMongoId().withMessage("Invalid post id"),
   body("title")
     .matches(/^[a-zA-Z0-9 ]{1,100}$/)
     .withMessage(
@@ -60,15 +60,12 @@ router.put(
     .withMessage("Content cannot be empty")
     .isLength({ max: 1000 })
     .withMessage("Content cannot be longer than 1000 characters"),
-  body("category")
-    .isIn(Object.values(BlogCategory))
-    .withMessage("Invalid blog category"),
-  updatePost,
+  updatePost
 );
 
 router.delete(
   "/:id",
-  query("id").custom((val) => !isValidObjectId(val)),
+  param("id").isMongoId().withMessage("Invalid post id"),
   deletePostById
 );
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import postDB from "../models/post";
 import { handleValidation } from "../utils/validation";
+import { Types } from "mongoose";
 
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
@@ -12,9 +13,10 @@ export const getAllPosts = async (req: Request, res: Response) => {
     const sortByTitle = req.query.title === "asc" ? 1 : -1;
 
     // Query
-    const dbQuery: { category?: string; author?: string } = {};
+    const dbQuery: { category?: string; author?: Types.ObjectId } = {};
     if (req.query.category) dbQuery["category"] = req.query.category as string;
-    if (req.query.author) dbQuery["author"] = req.query.author as string;
+    if (req.query.author)
+      dbQuery["author"] = new Types.ObjectId(req.query.author as string);
 
     // Pagination
     const page = parseInt(req.query.page as string) - 1;
@@ -33,12 +35,13 @@ export const getAllPosts = async (req: Request, res: Response) => {
       },
       {
         $project: {
-          author: { username: 1, avatar: 1 },
+          author: { _id: 1, username: 1, avatar: 1 },
           title: 1,
           content: 1,
           category: 1,
         },
       },
+      { $unwind: "$author" },
     ]);
 
     const count = await postDB.count(dbQuery);
@@ -55,7 +58,7 @@ export const addNewPost = async (req: Request, res: Response) => {
     if (errors) return res.status(400).json({ error: errors });
 
     const { title, content, category } = req.body;
-    const newPost = postDB.create({
+    const newPost = await postDB.create({
       title,
       content,
       category,
@@ -63,7 +66,7 @@ export const addNewPost = async (req: Request, res: Response) => {
     });
 
     if (!newPost) throw new Error("Something went wrong");
-    return res.status(201).json({ message: "Post created successfully" });
+    return res.status(201).json(newPost);
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e });
@@ -107,17 +110,13 @@ export const updatePost = async (req: Request, res: Response) => {
     const errors = handleValidation(req);
     if (errors) return res.status(400).json({ error: errors });
 
-    const { title, content, category } = req.body;
-    const post = await postDB
-      .findByIdAndUpdate(
-        req.params.id,
-        { title, content, category },
-        { new: true }
-      )
+    const { title, content } = req.body;
+    const updatedPost = await postDB
+      .findByIdAndUpdate(req.params.id, { title, content }, { new: true })
       .populate("author", "username avatar");
 
-    if (!post) return res.status(404).json({ error: "Post not found" });
-    return res.status(200).json({ message: "Post updated successfully" });
+    if (!updatedPost) return res.status(404).json({ error: "Post not found" });
+    return res.status(200).json(updatedPost);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
