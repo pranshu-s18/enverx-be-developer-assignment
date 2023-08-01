@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import userRoutes from "./routes/users";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 8000;
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
+
+app.use(express.json());
+app.use("/users", userRoutes);
 
 mongoose
   .connect(process.env.dbURL!)
