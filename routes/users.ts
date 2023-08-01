@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { login, register } from "../controllers/users";
+import { login, logout, register } from "../controllers/users";
 import { body } from "express-validator";
+import { notLoggedIn, verifyToken } from "../middlewares/auth";
 
 const router = Router();
 router.post(
   "/register",
+  notLoggedIn,
   body("email").isEmail().withMessage("Invalid E-Mail address"),
   body("password")
     .isStrongPassword({
@@ -27,9 +29,12 @@ router.post(
 
 router.post(
   "/login",
+  notLoggedIn,
   body("email").isEmail().withMessage("Invalid E-Mail address"),
   body("password").notEmpty().withMessage("Password cannot be empty"),
   login
 );
+
+router.get("/logout", verifyToken, logout);
 
 export default router;

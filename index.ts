@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/users";
 import postRoutes from "./routes/posts";
 
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(express.json());
+app.use(cookieParser());
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 

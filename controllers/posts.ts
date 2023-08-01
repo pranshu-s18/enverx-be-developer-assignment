@@ -126,7 +126,7 @@ export const deletePostById = async (req: Request, res: Response) => {
     if (!post) return res.status(404).json({ error: "Post not found" });
 
     // If user is not the author of the post, return 403 error
-    if (post.author !== request.user!._id) {
+    if (post.author.toString() !== request.user!._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not authorized to delete this post" });
@@ -162,7 +162,7 @@ export const updatePost = async (req: Request, res: Response) => {
     if (!post) return res.status(404).json({ error: "Post not found" });
 
     // If user is not the author of the post, return 403 error
-    if (post.author !== request.user!._id) {
+    if (post.author.toString() !== request.user!._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not authorized to update this post" });

@@ -8,6 +8,7 @@ import {
   updatePost,
 } from "../controllers/posts";
 import { BlogCategory } from "../models/post";
+import { verifyToken } from "../middlewares/auth";
 
 const router = Router();
 router.get(
@@ -25,6 +26,7 @@ router.get(
 
 router.post(
   "/",
+  verifyToken,
   body("title")
     .matches(/^[a-zA-Z0-9 ]{1,100}$/)
     .withMessage(
@@ -49,6 +51,7 @@ router.get(
 
 router.put(
   "/:id",
+  verifyToken,
   param("id").isMongoId().withMessage("Invalid post id"),
   body("title")
     .matches(/^[a-zA-Z0-9 ]{1,100}$/)
@@ -65,6 +68,7 @@ router.put(
 
 router.delete(
   "/:id",
+  verifyToken,
   param("id").isMongoId().withMessage("Invalid post id"),
   deletePostById
 );
